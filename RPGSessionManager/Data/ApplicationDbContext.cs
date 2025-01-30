@@ -12,5 +12,10 @@ namespace RPGSessionManager.Data
         public DbSet<Character> Characters { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Team> Teams { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
