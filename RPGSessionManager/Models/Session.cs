@@ -22,7 +22,7 @@ namespace RPGSessionManager.Models
         public int TeamId { get; set; }
 
         //relations
-        public Campaign Campaign { get; set; }
-        public Team Team { get; set; }
+        public required Campaign Campaign { get; set; }
+        public required Team Team { get; set; }
     }
 }
