@@ -1,5 +1,9 @@
 # 🎲 RPGSessionManager
 
+## 🎓 Note
+
+This project was created for the purpose of completing the ASP.NET Programming course assignment.
+
 ## Overview
 
 RPGSessionManager is a comprehensive web application designed for tabletop RPG enthusiasts and game masters. This powerful tool simplifies the complex process of managing roleplaying game sessions, campaigns, and related game elements.
@@ -28,7 +32,3 @@ For quick access and testing, two predefined accounts are available:
 - C#
 - HTML/CSS
 - Bootstrap
-
-## 📝 Note
-
-Please change the default credentials after first login for security purposes.
