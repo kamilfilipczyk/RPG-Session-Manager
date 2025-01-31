@@ -15,21 +15,21 @@ namespace RPGSessionManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Campaigns.ToListAsync());
+            return View(_context.Campaigns.ToList());
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var campaign = await _context.Campaigns
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var campaign = _context.Campaigns
+                .FirstOrDefault(m => m.Id == id);
             if (campaign == null)
             {
                 return NotFound();
