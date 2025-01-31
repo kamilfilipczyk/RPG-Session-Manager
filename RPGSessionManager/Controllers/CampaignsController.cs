@@ -122,6 +122,7 @@ namespace RPGSessionManager.Controllers
             return View(campaign);
         }
 
+        [HttpGet]
         public IActionResult Delete(int? id)
         {
             if (id == null)
