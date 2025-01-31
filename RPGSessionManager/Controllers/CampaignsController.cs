@@ -14,11 +14,17 @@ namespace RPGSessionManager.Controllers
             _context = context;
         }
 
+        private bool CampaignExists(int id)
+        {
+            return _context.Campaigns.Any(e => e.Id == id);
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             return View(_context.Campaigns.ToList());
         }
+
 
         [HttpGet]
         public IActionResult Details(int? id)
@@ -156,10 +162,9 @@ namespace RPGSessionManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        private bool CampaignExists(int id)
+        public IActionResult AboutPartial()
         {
-            return _context.Campaigns.Any(e => e.Id == id);
+            return PartialView("_About");
         }
     }
 }

@@ -155,5 +155,10 @@ namespace RPGSessionManager.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult AboutPartial()
+        {
+            return PartialView("_About");
+        }
     }
 }
