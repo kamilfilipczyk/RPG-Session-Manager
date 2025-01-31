@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RPGSessionManager.Data;
 using RPGSessionManager.Models;
 
 namespace RPGSessionManager.Controllers
 {
+    [Authorize(Roles = "player")]
     public class TeamsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,6 +22,7 @@ namespace RPGSessionManager.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View(_context.Teams.ToList());

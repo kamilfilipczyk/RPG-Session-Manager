@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RPGSessionManager.Data;
@@ -6,6 +7,7 @@ using RPGSessionManager.Models;
 
 namespace RPGSessionManager.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class SessionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +23,7 @@ namespace RPGSessionManager.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var applicationDbContext = _context.Sessions.Include(s => s.Campaign).Include(s => s.Team);
