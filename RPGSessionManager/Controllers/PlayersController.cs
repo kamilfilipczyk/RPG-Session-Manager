@@ -5,24 +5,24 @@ using RPGSessionManager.Models;
 
 namespace RPGSessionManager.Controllers
 {
-    public class TeamsController : Controller
+    public class PlayersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TeamsController(ApplicationDbContext context)
+        public PlayersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        private bool TeamExists(int id)
+        private bool PlayerExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.Players.Any(e => e.Id == id);
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_context.Teams.ToList());
+            return View(_context.Players.ToList());
         }
 
         [HttpGet]
@@ -33,14 +33,14 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var team = _context.Teams
+            var player = _context.Players
                 .FirstOrDefault(m => m.Id == id);
-            if (team == null)
+            if (player == null)
             {
                 return NotFound();
             }
 
-            return View(team);
+            return View(player);
         }
 
         [HttpGet]
@@ -51,15 +51,15 @@ namespace RPGSessionManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Name,About,HomeCity")] Team team)
+        public IActionResult Create([Bind("Id,Name")] Player player)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(team);
+                _context.Add(player);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            return View(player);
         }
 
         [HttpGet]
@@ -70,19 +70,19 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var team = _context.Teams.Find(id);
-            if (team == null)
+            var player = _context.Players.Find(id);
+            if (player == null)
             {
                 return NotFound();
             }
-            return View(team);
+            return View(player);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name,About,HomeCity")] Team team)
+        public IActionResult Edit(int id, [Bind("Id,Name")] Player player)
         {
-            if (id != team.Id)
+            if (id != player.Id)
             {
                 return NotFound();
             }
@@ -91,12 +91,12 @@ namespace RPGSessionManager.Controllers
             {
                 try
                 {
-                    _context.Update(team);
+                    _context.Update(player);
                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeamExists(team.Id))
+                    if (!PlayerExists(player.Id))
                     {
                         return NotFound();
                     }
@@ -107,7 +107,7 @@ namespace RPGSessionManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            return View(player);
         }
 
         [HttpGet]
@@ -118,30 +118,29 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var team = _context.Teams
+            var player = _context.Players
                 .FirstOrDefault(m => m.Id == id);
-            if (team == null)
+            if (player == null)
             {
                 return NotFound();
             }
 
-            return View(team);
+            return View(player);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _context.Teams.Include(c => c.Characters)
-                                           .FirstOrDefaultAsync(c => c.Id == id);
-            if (team == null)
+            var player = await _context.Players.Include(c => c.Characters)
+                                               .FirstOrDefaultAsync(c => c.Id == id);
+            if (player == null)
             {
                 return NotFound();
             }
 
-            _context.Characters.RemoveRange(team.Characters);
-            _context.Teams.Remove(team);
-
+            _context.Characters.RemoveRange(player.Characters);
+            _context.Players.Remove(player);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
