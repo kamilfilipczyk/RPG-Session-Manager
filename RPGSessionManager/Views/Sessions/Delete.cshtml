@@ -1,14 +1,14 @@
-﻿@model RPGSessionManager.Models.Campaign
+﻿@model RPGSessionManager.Models.Session
 
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete campaign</h1>
+<h1>Delete session</h1>
 
-<h3>This action will permamently delete this campaign with all it's members</h3>
+<h3>This action will permamently delete this session</h3>
 <div>
-    <h4>Campaign</h4>
+    <h4>Session</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -24,10 +24,22 @@
             @Html.DisplayFor(model => model.About)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HasEnded)
+            @Html.DisplayNameFor(model => model.Date)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HasEnded)
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Campaign)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Campaign.About)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Team)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Team.About)
         </dd>
     </dl>
     
