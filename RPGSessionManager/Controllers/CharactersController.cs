@@ -6,24 +6,24 @@ using RPGSessionManager.Models;
 
 namespace RPGSessionManager.Controllers
 {
-    public class SessionsController : Controller
+    public class CharactersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SessionsController(ApplicationDbContext context)
+        public CharactersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        private bool SessionExists(int id)
+        private bool CharacterExists(int id)
         {
-            return _context.Sessions.Any(e => e.Id == id);
+            return _context.Characters.Any(e => e.Id == id);
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var applicationDbContext = _context.Sessions.Include(s => s.Campaign).Include(s => s.Team);
+            var applicationDbContext = _context.Characters.Include(c => c.Player).Include(c => c.Team);
             return View(applicationDbContext.ToList());
         }
 
@@ -35,39 +35,39 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var session = _context.Sessions
-                .Include(s => s.Campaign)
-                .Include(s => s.Team)
+            var character = _context.Characters
+                .Include(c => c.Player)
+                .Include(c => c.Team)
                 .FirstOrDefault(m => m.Id == id);
-            if (session == null)
+            if (character == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(character);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "About");
+            ViewData["PlayerId"] = new SelectList(_context.Players, "Id", "Name");
             ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Title,About,Date,CampaignId,TeamId")] Session session)
+        public IActionResult Create([Bind("Id,FirstName,LastName,Profession,TeamId,PlayerId")] Character character)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(session);
+                _context.Add(character);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "About", session.CampaignId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", session.TeamId);
-            return View(session);
+            ViewData["PlayerId"] = new SelectList(_context.Players, "Id", "Name", character.PlayerId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", character.TeamId);
+            return View(character);
         }
 
         [HttpGet]
@@ -78,21 +78,21 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var session = _context.Sessions.Find(id);
-            if (session == null)
+            var character = _context.Characters.Find(id);
+            if (character == null)
             {
                 return NotFound();
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "About", session.CampaignId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", session.TeamId);
-            return View(session);
+            ViewData["PlayerId"] = new SelectList(_context.Players, "Id", "Name", character.PlayerId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", character.TeamId);
+            return View(character);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Title,About,Date,CampaignId,TeamId")] Session session)
+        public IActionResult Edit(int id, [Bind("Id,FirstName,LastName,Profession,TeamId,PlayerId")] Character character)
         {
-            if (id != session.Id)
+            if (id != character.Id)
             {
                 return NotFound();
             }
@@ -101,12 +101,12 @@ namespace RPGSessionManager.Controllers
             {
                 try
                 {
-                    _context.Update(session);
+                    _context.Update(character);
                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SessionExists(session.Id))
+                    if (!CharacterExists(character.Id))
                     {
                         return NotFound();
                     }
@@ -117,9 +117,9 @@ namespace RPGSessionManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "About", session.CampaignId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", session.TeamId);
-            return View(session);
+            ViewData["PlayerId"] = new SelectList(_context.Players, "Id", "Name", character.PlayerId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "About", character.TeamId);
+            return View(character);
         }
 
         [HttpGet]
@@ -130,29 +130,28 @@ namespace RPGSessionManager.Controllers
                 return NotFound();
             }
 
-            var session = _context.Sessions
-                .Include(s => s.Campaign)
-                .Include(s => s.Team)
+            var character = _context.Characters
+                .Include(c => c.Player)
+                .Include(c => c.Team)
                 .FirstOrDefault(m => m.Id == id);
-            if (session == null)
+            if (character == null)
             {
                 return NotFound();
             }
 
-            return View(session);
+            return View(character);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var session = await _context.Sessions.FindAsync(id);
-            if (session == null)
+            var character = await _context.Characters.FindAsync(id);
+            if (character != null)
             {
-                return NotFound();
+                _context.Characters.Remove(character);
             }
 
-            _context.Sessions.Remove(session);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
