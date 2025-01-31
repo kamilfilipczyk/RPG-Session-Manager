@@ -21,7 +21,7 @@ namespace RPGSessionManager.Models
         public int PlayerId { get; set; }
 
         //relations
-        public Team Team { get; set; }
-        public Player Player { get; set; }
+        public Team? Team { get; set; }
+        public Player? Player { get; set; }
     }
 }
