@@ -19,13 +19,13 @@ namespace RPGSessionManager.Controllers
             _context = context;
         }
 
-        // GET: Campaigns
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Campaigns.ToListAsync());
         }
 
-        // GET: Campaigns/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,18 +43,15 @@ namespace RPGSessionManager.Controllers
             return View(campaign);
         }
 
-        // GET: Campaigns/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Campaigns/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,About,HasEnded")] Campaign campaign)
+        public IActionResult Create([Bind("Id,Title,About,HasEnded")] Campaign campaign)
         {
 
             if (!ModelState.IsValid)
@@ -71,21 +68,21 @@ namespace RPGSessionManager.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(campaign);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(campaign);
         }
 
-        // GET: Campaigns/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet]
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var campaign = await _context.Campaigns.FindAsync(id);
+            var campaign = _context.Campaigns.Find(id);
             if (campaign == null)
             {
                 return NotFound();
@@ -93,12 +90,9 @@ namespace RPGSessionManager.Controllers
             return View(campaign);
         }
 
-        // POST: Campaigns/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,About,HasEnded")] Campaign campaign)
+        public IActionResult Edit(int id, [Bind("Id,Title,About,HasEnded")] Campaign campaign)
         {
             if (id != campaign.Id)
             {
@@ -110,7 +104,7 @@ namespace RPGSessionManager.Controllers
                 try
                 {
                     _context.Update(campaign);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,39 +120,6 @@ namespace RPGSessionManager.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(campaign);
-        }
-
-        // GET: Campaigns/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var campaign = await _context.Campaigns
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (campaign == null)
-            {
-                return NotFound();
-            }
-
-            return View(campaign);
-        }
-
-        // POST: Campaigns/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var campaign = await _context.Campaigns.FindAsync(id);
-            if (campaign != null)
-            {
-                _context.Campaigns.Remove(campaign);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool CampaignExists(int id)
