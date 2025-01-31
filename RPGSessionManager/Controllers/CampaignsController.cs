@@ -122,6 +122,45 @@ namespace RPGSessionManager.Controllers
             return View(campaign);
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var campaign = _context.Campaigns
+                .FirstOrDefault(m => m.Id == id);
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            return View(campaign);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var campaign = await _context.Campaigns
+                .Include(c => c.Sessions)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            _context.Sessions.RemoveRange(campaign.Sessions);
+
+            _context.Campaigns.Remove(campaign);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
         private bool CampaignExists(int id)
         {
             return _context.Campaigns.Any(e => e.Id == id);
