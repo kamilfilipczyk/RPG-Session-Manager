@@ -1,18 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPGSessionManager.Models
 {
     public class Session
     {
+        [HiddenInput]
         public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string Title { get; set; } = "";
+        public string Title { get; set; }
 
         [Required]
         [MaxLength(200)]
-        public string About { get; set; } = "";
+        public string About { get; set; }
 
         [Required]
         public DateOnly Date { get; set; }
@@ -23,6 +25,6 @@ namespace RPGSessionManager.Models
 
         //relations
         public Campaign? Campaign { get; set; }
-        public required Team Team { get; set; }
+        public Team? Team { get; set; }
     }
 }
